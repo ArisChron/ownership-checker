@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Ownership Checker</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div class="wrap">
+    <header class="top">
+        <div>
+            <h1>Ownership Checker</h1>
+            <p class="sub">Internal governance helper for decision ownership.</p>
+        </div>
+    </header>
+
+    <main class="grid">
+        <section class="card">
+            <h2>Describe the decision</h2>
+
+            <form method="post" th:action="@{/check}" th:object="${input}">
+                <label class="lbl">Decision summary</label>
+                <textarea class="textarea" th:field="*{description}" placeholder='e.g. “Adopt Kafka as shared event backbone across services to support 10x webhook volume.”'></textarea>
+                <div class="err" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+
+                <div class="row">
+                    <div>
+                        <label class="lbl">Team (optional)</label>
+                        <select class="select" th:field="*{team}">
+                            <option value="">—</option>
+                            <option value="Platform">Platform</option>
+                            <option value="Product">Product</option>
+                            <option value="Core Engineering">Core Engineering</option>
+                            <option value="Ops / SRE">Ops / SRE</option>
+                            <option value="Security">Security</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="lbl">System (optional)</label>
+                        <select class="select" th:field="*{system}">
+                            <option value="">—</option>
+                            <option value="Core API">Core API</option>
+                            <option value="Data Platform">Data Platform</option>
+                            <option value="Customer Portal">Customer Portal</option>
+                            <option value="Mobile">Mobile</option>
+                            <option value="Payments">Payments</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="inline">
+                        <label class="lbl">Tone</label>
+                        <select class="select" th:field="*{tone}">
+                            <option value="serious">Serious</option>
+                            <option value="spicy">Spicy</option>
+                        </select>
+                    </div>
+                    <div class="inline">
+                        <label class="chk">
+                            <input type="checkbox" th:field="*{roastEnabled}"/>
+                            Enable reality check
+                        </label>
+                    </div>
+                </div>
+
+                <hr class="hr"/>
+
+                <h2>Quick questions</h2>
+
+                <div class="q">
+                    <div class="qrow">
+                        <div class="qname">Reversibility</div>
+                        <div class="qopts">
+                            <label><input type="radio" th:field="*{reversibility}" value="3" th:checked="${input.reversibility == 3}"> Hard</label>
+                            <label><input type="radio" th:field="*{reversibility}" value="2"> Medium</label>
+                            <label><input type="radio" th:field="*{reversibility}" value="1"> Easy</label>
+                        </div>
+                    </div>
+
+                    <div class="qrow">
+                        <div class="qname">Time horizon</div>
+                        <div class="qopts">
+                            <label><input type="radio" th:field="*{horizon}" value="1"> Days</label>
+                            <label><input type="radio" th:field="*{horizon}" value="2"> Weeks</label>
+                            <label><input type="radio" th:field="*{horizon}" value="3"> Quarters+</label>
+                        </div>
+                    </div>
+
+                    <div class="qrow">
+                        <div class="qname">Blast radius</div>
+                        <div class="qopts">
+                            <label><input type="radio" th:field="*{blast}" value="1"> Single team</label>
+                            <label><input type="radio" th:field="*{blast}" value="2"> Multi-team</label>
+                            <label><input type="radio" th:field="*{blast}" value="3"> Company-wide</label>
+                        </div>
+                    </div>
+
+                    <div class="qrow">
+                        <div class="qname">Failure cost</div>
+                        <div class="qopts">
+                            <label><input type="radio" th:field="*{failureCost}" value="1"> Low</label>
+                            <label><input type="radio" th:field="*{failureCost}" value="2"> Medium</label>
+                            <label><input type="radio" th:field="*{failureCost}" value="3"> High</label>
+                        </div>
+                    </div>
+
+                    <div class="qrow">
+                        <div class="qname">Decision frequency</div>
+                        <div class="qopts">
+                            <label><input type="radio" th:field="*{frequency}" value="1"> One-off</label>
+                            <label><input type="radio" th:field="*{frequency}" value="2"> Occasional</label>
+                            <label><input type="radio" th:field="*{frequency}" value="3"> Systemic</label>
+                        </div>
+                    </div>
+
+                    <div class="qrow">
+                        <div class="qname">Who feels it first?</div>
+                        <div class="qopts">
+                            <label><input type="radio" th:field="*{customerImpact}" value="3"> Customers</label>
+                            <label><input type="radio" th:field="*{customerImpact}" value="2"> Engineers</label>
+                            <label><input type="radio" th:field="*{customerImpact}" value="1"> Leadership</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn primary" type="submit">Check ownership</button>
+                </div>
+
+                <footer class="footer">
+                    <span class="foot">Decision support, not decision replacement. Based on the <a href="https://gifted-egret-688.notion.site/Engineering-Governance-AI-Readiness-A-Practical-Playbook-2ed284b1d19a801e94f4ff2602ff55e3" target="_blank">Engineering Governance & AI Readiness playbook</a>.</span>
+                </footer>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

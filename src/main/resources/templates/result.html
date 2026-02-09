@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ownership Checker — Result</title>
+  <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Ownership Checker</h1>
+      <p class="sub">Result</p>
+    </div>
+    <div class="topActions">
+      <a class="btn" th:href="@{/}">New check</a>
+      <button class="btn" type="button" onclick="copyCard()">Copy card</button>
+    </div>
+  </header>
+
+  <main class="grid2">
+    <section class="card">
+      <h2>Decision Domain</h2>
+      <div class="bigRow">
+        <span class="badge" th:text="${result.domain.label()}">Architectural</span>
+        <span class="muted" th:text="${result.confidencePct + '% match'}">82% match</span>
+      </div>
+
+      <hr class="hr"/>
+
+      <h2>Recommended owner</h2>
+      <div class="kv">
+        <div><span class="k">Owner</span><span class="v" th:text="${result.owner}">CTO / Head of Engineering</span></div>
+        <div><span class="k">Contributors</span><span class="v" th:text="${result.contributors}">Platform, Security</span></div>
+      </div>
+
+      <hr class="hr"/>
+
+      <h2>Risk if unclear</h2>
+      <div class="kv">
+        <div><span class="k">Risk</span><span class="v" th:text="${result.risk}">High</span></div>
+        <div><span class="k">Why</span><span class="v" th:text="${result.riskWhy}">Multi-team + hard to reverse + high failure cost</span></div>
+      </div>
+
+      <hr class="hr"/>
+
+      <div class="twoCols">
+        <div class="box">
+          <h3>AI can do</h3>
+          <ul>
+            <li th:each="x : ${result.aiCan}" th:text="${x}">Draft ADR</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Human must own</h3>
+          <ul>
+            <li th:each="x : ${result.humanMust}" th:text="${x}">Final decision</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roast" th:if="${result.roast != null and !result.roast.isBlank()}">
+        <strong>Reality check:</strong>
+        <span th:text="${result.roast}"></span>
+      </div>
+
+      <hr class="hr"/>
+
+      <h2>Ownership Card</h2>
+      <pre id="card" class="mono" th:text="${result.ownershipCard}"></pre>
+
+      <footer class="footer">
+        <span class="foot" th:text="${result.footerTrust}">Decision support, not decision replacement…</span>
+      </footer>
+    </section>
+  </main>
+</div>
+
+<script>
+  function copyCard(){
+    const el = document.getElementById('card');
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      alert('Ownership Card copied');
+    });
+  }
+</script>
+</body>
+</html>
