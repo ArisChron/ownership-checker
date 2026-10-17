@@ -1,0 +1,20 @@
+# Exported from Render on 2026-10-17T14:35:22Z
+version: "1"
+projects:
+- name: My project
+  environments:
+  - name: Production
+    services:
+    - type: web
+      name: ownership-checker
+      runtime: docker
+      repo: https://github.com/ArisChron/ownership-checker
+      plan: starter
+      envVars:
+      - key: PORT
+        sync: false
+      region: oregon
+      healthCheckPath: /actuator/health
+      dockerContext: .
+      dockerfilePath: ./Dockerfile
+      autoDeployTrigger: commit
